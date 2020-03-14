@@ -18,7 +18,7 @@ import ShareReader from "@/components/share-reader"
 export default {
   metaInfo() {
     return {
-      title: "欢迎来到sshPlayer"
+      title: "云音乐系统"
     }
   },
   components: { Layout, MiniPlayer, Playlist, Player, ShareReader }
