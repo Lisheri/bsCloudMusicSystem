@@ -1,35 +1,6 @@
 <template>
   <div class="header">
     <div class="left">
-      <div class="buttons">
-        <div
-          @click="onClickLogo"
-          class="mac-button red"
-        >
-          <Icon
-            :size="9"
-            type="home"
-          />
-        </div>
-        <div
-          @click="exitFullscreen"
-          class="mac-button yellow"
-        >
-          <Icon
-            :size="9"
-            type="minus"
-          />
-        </div>
-        <div
-          @click="fullscreen"
-          class="mac-button green"
-        >
-          <Icon
-            :size="9"
-            type="fullscreen"
-          />
-        </div>
-      </div>
       <!-- 缩起播放器 -->
       <div
         @click="onClickDown"
@@ -63,23 +34,11 @@ import Theme from "@/components/theme"
 import Search from "@/components/search"
 import RoutesHistory from "@/components/routes-history"
 import { mapState, mapMutations } from "@/store/helper/music"
-import { requestFullScreen, exitFullscreen, isFullscreen } from "@/utils"
 
 export default {
   methods: {
-    onClickLogo() {
-      this.$router.push("/discovery")
-    },
     onClickDown() {
       this.setPlayerShow(false)
-    },
-    fullscreen() {
-      requestFullScreen(document.documentElement)
-    },
-    exitFullscreen() {
-      if (isFullscreen()) {
-        exitFullscreen()
-      }
     },
     toggleFullscreen() {
       this.isFullscreen = !this.isFullscreen
@@ -164,9 +123,6 @@ export default {
       margin-left: 16px;
     }
 
-    .history {
-      margin-left: 65px;
-    }
 
     .actions {
       margin-left: 70px;

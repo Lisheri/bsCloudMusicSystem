@@ -12,6 +12,7 @@ const SearchMvs = () => import('@/page/search/mvs')
 
 const Mvs = () => import('@/page/mvs')
 const Mv = () => import('@/page/mv')
+const Goods = () => import('@/page/goods')
 
 // 内容需要居中的页面
 export const layoutCenterNames = ['discovery', 'playlists', 'songs', 'mvs']
@@ -52,6 +53,15 @@ export const menuRoutes = [
     meta: {
       title: '最新MV',
       icon: 'mv',
+    },
+  },
+  {
+    path: '/goods',
+    name: 'goods',
+    component: Goods,
+    meta: {
+      title: '云音乐商城',
+      icon: 'el-icon-goods',
     },
   },
 ]

@@ -1,10 +1,9 @@
 # 🎵基于Vue2、Vue-CLI3的高仿网易云mac客户端播放器（PC） Online Music Player
 
-音乐播放器虽然烂大街了，但是作为前端没自己撸一个一直是个遗憾，而且偶然间发现 pc 端 web 版的网易云音乐做的实在是太简陋了，社区仿 pc 客户端的网易云也不多见，为了弥补这个遗憾，就用 vue 全家桶模仿 mac 客户端的 ui 实现了一个，欢迎提出意见和 star~
+这是一个仿网易云的一个音乐播放界面，基于一位前辈的项目进行二次开发，仅作为一个简单的学习项目使用，并不存在任何的商用目的，如果有任何冒犯，请私信我哦~~
 
-### [预览地址](https://music.sl1673495.now.sh/)
 
-### [源码地址](https://github.com/sl1673495/vue-netease-music)
+### [源码地址](https://github.com/Lisheri/bsCloudMusicSystem)
 
 ### 进度
 
@@ -24,6 +23,7 @@
 
 ### 后端接口
 
+还在制作中，暂时先使用网易云后端
 https://binaryify.github.io/NeteaseCloudMusicApi
 
 ### 技术栈
@@ -32,19 +32,11 @@ https://binaryify.github.io/NeteaseCloudMusicApi
 - ui 库用了魔改样式的 element-ui
 - 歌词滚动部分用了黄轶老大的 better-scroll（贼爽）
 - 主题换肤用的 css 变量替换。
-- ES 6 / 7 （JavaScript 语言的下一代标准）
+- ES 6 / 7 
 - Sass（CSS 预处理器）
 - postcss-pxtorem（自动处理 rem，妈妈再也不用担心屏幕太大太小了）
 
 ### Screenshots
-
-![首页](https://user-images.githubusercontent.com/23615778/62509203-da358580-b83c-11e9-97b3-367fb06a8347.png)
-
-![歌单列表](https://user-images.githubusercontent.com/23615778/62509204-dace1c00-b83c-11e9-8d3f-0bcb93e3aab7.png)
-
-![歌单详情](https://user-images.githubusercontent.com/23615778/62509201-d99cef00-b83c-11e9-8e4b-b122b8b94468.png)
-
-![音乐播放](https://user-images.githubusercontent.com/23615778/62509202-da358580-b83c-11e9-98e1-530e5741ff56.png)
 
 ### 安装与使用
 
@@ -52,6 +44,3 @@ https://binaryify.github.io/NeteaseCloudMusicApi
 npm i
 npm run dev
 ```
-
-### 友情链接
-[mmPlayer](https://github.com/maomao1996/Vue-mmPlayer)
