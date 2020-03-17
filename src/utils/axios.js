@@ -3,8 +3,8 @@ import { Loading } from 'element-ui'
 import { confirm } from '@/base/confirm'
 import store from '@/store'
 
-const BASE_URL = 'https://api.mtnhao.com/'
-// const BASE_URL = '192.168.31.44:3000/'
+// const BASE_URL = 'https://api.mtnhao.com/'
+const BASE_URL = 'http://192.168.31.44:3001/'
 // 不带全局loading的请求实例
 export const requestWithoutLoading = createBaseInstance()
 // 带全局loading的请求实例

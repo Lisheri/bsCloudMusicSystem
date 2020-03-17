@@ -96,10 +96,8 @@ import { createSong, genArtistisText, debounce } from "@/utils"
 const SEARCH_HISTORY_KEY = "__search_history__"
 export default {
   async created() {
-    const {
-      result: { hots }
-    } = await getSearchHot()
-    this.searchHots = hots
+    const result = await getSearchHot();
+    this.searchHots = result.hots;
   },
   data() {
     return {
