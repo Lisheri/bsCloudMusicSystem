@@ -13,7 +13,7 @@
 import { getBanner } from "@/api"
 export default {
   async created() {
-    const { banners } = await getBanner()
+    const  banners = await getBanner()
     this.banners = banners
   },
   data() {

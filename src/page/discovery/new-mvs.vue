@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     async getMvs() {
-      const { result } = await getPersonalizedMv()
+      const result = await getPersonalizedMv();
       this.mvs = result
     }
   },

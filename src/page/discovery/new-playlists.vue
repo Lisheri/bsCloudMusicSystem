@@ -23,7 +23,7 @@ import { getPersonalized } from "@/api"
 
 export default {
   async created() {
-    const { result } = await getPersonalized({ limit: 10 })
+    const result = await getPersonalized({ limit: 10 })
     this.list = result
   },
   data() {
