@@ -32,9 +32,8 @@ import { createSong } from "@/utils"
 const songsLimit = 10
 export default {
   async created() {
-    const result = await getNewSongs()
-    console.log(result)
-    this.list = result
+    const result = await getNewSongs();
+    this.list = result;
   },
   data() {
     return {

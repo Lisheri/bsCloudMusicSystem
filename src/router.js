@@ -13,6 +13,7 @@ const SearchMvs = () => import('@/page/search/mvs')
 const Mvs = () => import('@/page/mvs')
 const Mv = () => import('@/page/mv')
 const Goods = () => import('@/page/goods')
+const GoodDec = () => import('./components/goodDec.vue');
 
 // 内容需要居中的页面
 export const layoutCenterNames = ['discovery', 'playlists', 'songs', 'mvs']
@@ -112,6 +113,12 @@ export default new Router({
       name: 'mv',
       component: Mv,
       props: (route) =>  ({id: +route.params.id}),
+    },
+    {
+      path: '/goods/goodDec/:id',
+      name: 'goodDec',
+      component: GoodDec,
+      props: (route) => ({id: route.params.id})
     },
     ...menuRoutes,
   ],

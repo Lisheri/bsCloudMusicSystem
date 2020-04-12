@@ -8,6 +8,8 @@ import '@/utils/rem'
 import '@/utils/axios'
 import store from './store/index'
 import global from './utils/global'
+import 'bootstrap'
+import $ from 'jquery'
 
 Vue.config.productionTip = false
 Vue.use(global)
