@@ -11,6 +11,23 @@
                         i9S蓝牙5.0真无线 双耳高清通话 苹果安卓通用
                     </span>
                 </div>
+                <div class="section2">
+                    <div class="goodPic">
+                        <div class="tabCon">
+                            <div v-for='(itemCon,index) in tabContents' v-show="index == num">
+                                <img-zoom :src="itemCon.smPicUrl" width="440" height="440" :bigsrc="itemCon.bigPicUrl" :configs="configs"></img-zoom>
+                            </div>
+                        </div>
+                        <div class="menuList">
+                            <ul class="clear">
+                                <li class="fl" v-for="(item,index) in list" :key="item.id" :class="{active:num==index}" @click="getNum(index)">
+                                    <img :src="item">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="goodInfo">详细购买</div>
+                </div>
 <!--                <img-zoom src="http://p4.music.126.net/JoivF7YdpLKzdFrFYuE5uA==/109951164077937291.jpg?param=440y440" width="440" height="440" bigsrc="http://p4.music.126.net/JoivF7YdpLKzdFrFYuE5uA==/109951164077937291.jpg" :configs="configs"></img-zoom>-->
             </div>
         </div>
@@ -40,8 +57,19 @@
                     maskHeight:291,
                     maskColor:'black',
                     maskOpacity:0.2
-                }
+                },
+                num: 0,
+                list: ["http://p3.music.126.net/7BadYjIuLqk3WSh0OqJrBg==/109951164541267299.jpg", "http://p4.music.126.net/Ur8hyqTnCqbZ7Qw0xScWaw==/109951164541263421.jpg", "http://p4.music.126.net/87e0k-RS1bkC9cLc9pk89A==/109951164541272644.jpg"],
+                tabContents: [
+                    {smPicUrl: "http://p3.music.126.net/7BadYjIuLqk3WSh0OqJrBg==/109951164541267299.jpg?param=440y440", bigPicUrl: "http://p3.music.126.net/7BadYjIuLqk3WSh0OqJrBg==/109951164541267299.jpg"},
+                    {smPicUrl: "http://p4.music.126.net/Ur8hyqTnCqbZ7Qw0xScWaw==/109951164541263421.jpg?param=440y440", bigPicUrl: "http://p4.music.126.net/Ur8hyqTnCqbZ7Qw0xScWaw==/109951164541263421.jpg"},
+                    {smPicUrl: "http://p4.music.126.net/87e0k-RS1bkC9cLc9pk89A==/109951164541272644.jpg?param=440y440", bigPicUrl: "http://p4.music.126.net/87e0k-RS1bkC9cLc9pk89A==/109951164541272644.jpg"}],
 
+            }
+        },
+        methods: {
+            getNum(index) {
+                this.num = index;
             }
         },
         components: {Head, imgZoom}
@@ -64,6 +92,14 @@
         background-color: #ccc;
         opacity: 0.3;
         margin: 0;
+    }
+    .fl {
+        float: left;
+    }
+    .clear:after {
+        content: '';
+        display: block;
+        clear: both;
     }
     .el-container {
         .el-main {
@@ -96,6 +132,46 @@
                             margin: 0 4px 0 8px;
                             background: url(https://s2.music.126.net/store/web/img/ar.png?8e0f97ef027b13f7661fc5d89aaeb070) no-repeat left center;
                         }
+                    }
+                }
+                .section2 {
+                    display: flex;
+                    width: 100%;
+                    margin-top: 50px;
+                    .goodPic {
+                        width: 55%;
+                        margin-right: 2%;
+                        .tabCon {
+                            ._magnifier {
+                                border: 1px solid rgba(0,0,0,.2);
+                                background-color: #f9f9f9;
+                            }
+                        }
+                        .menuList {
+                            margin-top: 20px;
+                            ul {
+                                li {
+                                    width: 80px;
+                                    height: 80px;
+                                    margin-right: 10px;
+                                    box-sizing: border-box;
+                                    border: 2px solid transparent;
+                                    img {
+                                        width: 76px;
+                                        height: 76px;
+                                    }
+                                }
+                                li.active {
+                                    border: 2px solid #000;
+                                }
+                                li:hover {
+                                    border: 2px solid #000;
+                                }
+                            }
+                        }
+                    }
+                    .goodInfo {
+                        width: 40%;
                     }
                 }
             }
