@@ -2,9 +2,13 @@ import axios from 'axios'
 import { Loading } from 'element-ui'
 import { confirm } from '@/base/confirm'
 import store from '@/store'
+import QS from 'qs'
 
 // const BASE_URL = 'https://api.mtnhao.com/'
-const BASE_URL = 'http://192.168.31.44:3001/'
+// const BASE_URL = 'http://192.168.31.44:3001/'
+// const BASE_URL = 'http://192.168.0.103:3001/'
+// const BASE_URL = 'http://192.168.10.116:3001'
+const BASE_URL = 'http://192.168.1.8:3001'
 // 不带全局loading的请求实例
 export const requestWithoutLoading = createBaseInstance()
 // 带全局loading的请求实例
@@ -73,4 +77,42 @@ function mixinLoading(interceptors) {
     handleResponseLoading()
     throw e
   }
+}
+
+export function post(url, params) {
+  return new Promise((resolve, reject) => {
+       axios.post(BASE_URL+url, QS.stringify(params))
+      .then(res => {
+          resolve(res.data);
+      })
+      .catch(err =>{
+          reject(err.data)
+      })
+  });
+}
+
+const newaxios = axios.create({
+  baseURL: BASE_URL
+})
+
+
+newaxios.interceptors.request.use(
+  config => {
+    // config.headers['Content-Type'] = 'text/plain' // 关键所在
+    config.headers['Content-Type'] = 'application/x-www-form-urlencoded' // 关键所在
+    return config
+  },
+  error => {
+    console.log(error) // for debug
+    Promise.reject(error)
+  }
+)
+
+
+export function postAction(url,parameter) {
+  return newaxios({
+    url: url,
+    method:'post',
+    data: QS.stringify(parameter)
+  })
 }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import shopCart from "./components/shopCart";
 
 const Discovery = () => import('@/page/discovery')
 const PlaylistDetail = () => import('@/page/playlist-detail')
@@ -14,6 +15,10 @@ const Mvs = () => import('@/page/mvs')
 const Mv = () => import('@/page/mv')
 const Goods = () => import('@/page/goods')
 const GoodDec = () => import('./components/goodDec.vue');
+const HotGoods = () => import('./components/hotGoods.vue');
+const IpPeriphery = () => import('./components/ipPeriphery.vue');
+const ShopCart = () => import('./components/shopCart.vue');
+const Register = () => import('./components/register.vue');
 
 // 内容需要居中的页面
 export const layoutCenterNames = ['discovery', 'playlists', 'songs', 'mvs']
@@ -112,13 +117,33 @@ export default new Router({
       path: '/mv/:id',
       name: 'mv',
       component: Mv,
-      props: (route) =>  ({id: +route.params.id}),
+      props: (route) => ({ id: route.params.id }),
     },
     {
       path: '/goods/goodDec/:id',
       name: 'goodDec',
       component: GoodDec,
-      props: (route) => ({id: route.params.id})
+      // props: (route) => ({id: route.params.id}),
+    },
+    {
+      path: '/goods/hotGoods',
+      name: 'hotGoods',
+      component: HotGoods,
+    },
+    {
+      path: '/goods/ipPeriphery',
+      name: 'ipPeriphery',
+      component: IpPeriphery,
+    },
+    {
+      path: '/goods/shopCart',
+      name: 'shopCart',
+      component: ShopCart
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     },
     ...menuRoutes,
   ],

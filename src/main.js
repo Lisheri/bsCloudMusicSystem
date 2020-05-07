@@ -11,8 +11,12 @@ import global from './utils/global'
 import 'bootstrap'
 import $ from 'jquery'
 
+import axios from 'axios'
+Vue.use(axios)
+
 Vue.config.productionTip = false
 Vue.use(global)
+
 
 new Vue({
   router,

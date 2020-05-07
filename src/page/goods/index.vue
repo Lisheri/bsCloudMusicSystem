@@ -6,12 +6,12 @@
             <div class="section2">
                 <ul class="navigation widthConstraint">
                     <li class="f1 navigationBar">
-                        <a href="javascript:void(0)" class="bar">
+                        <a href="javascript:void(0)" class="bar" @click="goHotGoods">
                             <i class="el-icon-hot"></i>
                             <span>热销商品</span>
                         </a>
                     </li>
-                    <li class="f1 navigationBar"><a href="javascript:void(0)" class="bar">
+                    <li class="f1 navigationBar"><a href="javascript:void(0)" class="bar" @click="goIpPeriphery">
                         <i class="el-icon-shopping-bag-2" alt="IP周边"></i>
                         <span>IP周边</span>
                     </a></li>
@@ -25,7 +25,7 @@
             </div>
             <div class="section3">
                 <div class="brand  clear widthConstraint">
-                    <div class="hotgoods f1"></div>
+                    <div class="hotgoods f1" @click="goHotGoods"></div>
                     <div class="periphery f1"></div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     <ul class="list clear">
                         <li class="goodCard f1" v-for="editorChoice in EditorChoices" :key="editorChoice.id">
                             <div>
-                                <a href="javascript: void(0)" class="goodPic" @click="goGood(editorChoice.id)">
+                                <a href="javascript: void(0)" class="goodPic" @click="goGood(editorChoice.id, editorChoice)">
                                     <img :src="editorChoice.imgUrl" alt="">
                                     <span class="priceTag" v-if="editorChoice.hasPriceTag">
                                         <span class="new-price">¥{{editorChoice.newPrice}}</span>
@@ -84,7 +84,7 @@
                 <div class="widthConstraint">
                     <h2 class="editorChoice">热门商品</h2>
                     <ul class="list clear">
-                        <li class="goodCard f1" v-for="hotGood in HotGoods" :key="hotGood.id">
+                        <li class="goodCard f1" v-for="hotGood in HotGoods" :key="hotGood.id" @click="goGood(hotGood.id, hotGood)">
                             <div>
                                 <a href="javascript: void(0)" class="goodPic">
                                     <img :src="hotGood.imgUrl" alt="">
@@ -128,18 +128,36 @@ export default {
         const hotGoods = await getHotGoods();
         this.EditorChoices = EditorChoices;
         this.HotGoods = hotGoods;
-
     },
     data() {
         return {
             circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
             EditorChoices: [],
-            HotGoods: []
+            HotGoods: [],
+            goodData: {},
         }
     },
     methods: {
-        goGood(id) {
-            this.$router.push(`/goods/goodDec/${id}`)
+        goGood(id, good) {
+            this.goodData = {
+                id: good.id,
+                imgUrl: good.imgUrl,
+                singlePrice: good.nowPrice,
+                name: good.goodName
+            };
+            this.$router.push({
+                path: `/goods/goodDec/${id}`,
+                query: {
+                    id: id,
+                    obj: JSON.stringify(this.goodData)
+                }
+            });
+        },
+        goHotGoods() {
+            this.$router.push('/goods/hotGoods');
+        },
+        goIpPeriphery() {
+            this.$router.push('/goods/ipPeriphery');
         }
     },
     components: {Banner, Search, Head}

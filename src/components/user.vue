@@ -1,25 +1,26 @@
 <template>
   <div class="user">
     <!-- 登录前 -->
-    <div @click="onOpenModal" class="login-trigger" v-if="!isLogin">
+    <div @click="visible=true" class="login-trigger" v-if="!isLogin">
       <i class="user-icon iconfont icon-yonghu" />
       <p class="user-name">未登录</p>
     </div>
     <!-- 登录后 -->
     <div @click="onLogout" class="logined-user" v-else>
-      <img v-lazy="$utils.genImgUrl(user.avatarUrl, 80)" class="avatar" />
+      <img v-lazy="$utils.genImgUrl(user.pic, 80)" class="avatar" />
       <p class="user-name">{{ user.nickname }}</p>
     </div>
 
     <!-- 登录框 -->
     <el-dialog
-      :modal="false"
+      :modal="true"
       :visible.sync="visible"
       :width="$utils.toRem(320)"
+      @close="visible=false"
     >
       <p slot="title">登录</p>
-      <div class="login-body">
-        <el-input
+      <!-- <div class="login-body"> -->
+      <!-- <el-input
           class="input"
           placeholder="请输入您的网易云uid"
           v-model="uid"
@@ -36,66 +37,99 @@
           <p class="help">
             4、复制浏览器地址栏 /user/home?id= 后面的数字（网易云 UID）
           </p>
-        </div>
-      </div>
+      </div>-->
+      <el-form :label-position="top" label-width="80px" :model="formLabelAlign">
+        <el-form-item label="账号">
+          <el-input v-model="formLabelAlign.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="formLabelAlign.password"></el-input>
+        </el-form-item>
+      </el-form>
       <span class="dialog-footer" slot="footer">
-        <el-button
-          :loading="loading"
-          @click="onLogin(uid)"
-          class="login-btn"
-          type="primary"
-          >登 录</el-button
-        >
+        <el-button :loading="loading" @click="onLogin" class="login-btn" type="primary">登 录</el-button>
+        <el-button :loading="loading" @click="goRegister" class="register-btn" type="primary">注 册</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import storage from "good-storage"
-import { UID_KEY, isDef } from "@/utils"
-import { confirm } from "@/base/confirm"
+import storage from "good-storage";
+import { UID_KEY, isDef } from "@/utils";
+import { confirm } from "@/base/confirm";
 import {
   mapActions as mapUserActions,
   mapState as mapUserState,
   mapGetters as mapUserGetters
-} from "@/store/helper/user"
+} from "@/store/helper/user";
+import bus from "@/bus";
 
 export default {
   // 自动登录
   created() {
-    const uid = storage.get(UID_KEY)
-    if (isDef(uid)) {
-      this.onLogin(uid)
-    }
+    // const uid = storage.get(UID_KEY);
+    // if (isDef(uid)) {
+    //   this.onLogin(uid);
+    // }
+  },
+  mounted() {
+    bus.$once("registerSuccess", (res) => {
+      this.$notify({
+        title: "成功",
+        message: "注册成功",
+        type: "success",
+        duration: 3000,
+        position: "top-right"
+      });
+    });
   },
   data() {
     return {
       visible: false,
       loading: false,
-      uid: ""
-    }
+      registerVisible: false,
+      uid: "",
+      formLabelAlign: {
+        username: "",
+        password: ""
+      }
+    };
   },
   methods: {
-    onOpenModal() {
-      this.visible = true
-    },
-    onCloseModal() {
-      this.visible = false
-    },
-    async onLogin(uid) {
-      this.loading = true
-      const success = await this.login(uid).finally(() => {
-        this.loading = false
-      })
+    async onLogin() {
+      this.loading = true;
+      const success = await this.login(formLabelAlign.username).finally(() => {
+        this.loading = false;
+      });
       if (success) {
-        this.onCloseModal()
+        this.visible = false;
       }
     },
     onLogout() {
       confirm("确定要注销吗？", () => {
-        this.logout()
-      })
+        this.logout();
+      });
+    },
+    goRegister() {
+      this.$router.push("/register");
+      this.visible = false;
+    },
+    open1() {
+      this.$notify({
+        title: "成功",
+        message: "注册成功",
+        type: "success",
+        duration: 3000,
+        position: "top-right"
+      });
+      // Notification.success({
+      //   title: "成功",
+      //   message: "注册成功",
+      //   type: "success",
+      //   duration: 3000,
+      //   position: "top-right"
+      // })
     },
     ...mapUserActions(["login", "logout"])
   },
@@ -104,7 +138,7 @@ export default {
     ...mapUserGetters(["isLogin"])
   },
   components: {}
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -144,9 +178,20 @@ export default {
     }
   }
 
-  .login-btn {
-    width: 100%;
-    padding: 8px 0;
+  .dialog-footer {
+    display: flex;
+    .login-btn {
+      width: 45%;
+      padding: 8px 0;
+      margin-right: auto;
+    }
+
+    .register-btn {
+      width: 45%;
+      padding: 8px 0;
+      margin-left: 0;
+      margin-right: auto;
+    }
   }
 
   .logined-user {
@@ -158,5 +203,8 @@ export default {
       @include round(40px);
     }
   }
+}
+/deep/ .el-dialog {
+  height: 270px;
 }
 </style>

@@ -9,7 +9,18 @@ import {
   TableColumn,
   Popover,
   Pagination,
+  InputNumber,
+  Collapse,
+  CollapseItem,
+  Checkbox,
+  Form,
+  FormItem,
+  Notification,
+  Message,
 } from "element-ui"
+
+import Notifications from "vue-notification"
+
 import VueLazyload from "vue-lazyload"
 import Meta from 'vue-meta'
 import * as utils from "./index"
@@ -44,6 +55,16 @@ export default {
     Vue.use(Loading)
     Vue.use(Dialog)
     Vue.use(Button)
+    Vue.use(InputNumber)
+    Vue.use(Collapse)
+    Vue.use(CollapseItem)
+    Vue.use(Checkbox)
+    Vue.use(Form)
+    Vue.use(FormItem)
+    Vue.use(Notification)
+    // Vue.use(Notifications)
+    Vue.prototype.$message = Message
+    Vue.prototype.$notify = Notification
 
     Vue.use(Meta)
 

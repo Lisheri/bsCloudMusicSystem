@@ -1,5 +1,6 @@
 module.exports = {
   outputDir: 'music',
+  publicPath: './',
   configureWebpack: {
     devServer: {
       open: true,
