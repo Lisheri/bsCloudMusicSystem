@@ -9,28 +9,31 @@
         </div>
         <div class="section2">
           <p class="buyInfo">收货信息</p>
-          <el-button @click="handleEdit(addressArr[0])">修改</el-button>
+          <el-button @click="handleEdit(address)">修改</el-button>
           <el-row gutter="24" type="flex">
             <el-col :span="16">
               <div class="grid-content bg-purple">
                 <div class="people">
                   <span>
-                    <i>收货人：</i>{{addressArr[0].name}}
+                    <i>收货人：</i>
+                    {{address.name}}
                   </span>
                   <span style="margin-left:20px">
-                    <i>联系方式：</i>{{addressArr[0].phone}}
+                    <i>联系方式：</i>
+                    {{address.phone}}
                   </span>
                 </div>
                 <div class="address">
                   <span>
-                    <i>收货地址：</i>{{addressArr[0].address}}
+                    <i>收货地址：</i>
+                    {{address.address}}
                   </span>
                 </div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="grid-content bg-purple-light">
-                <el-button type="text">更换收货地址</el-button>
+                <el-button type="text" @click="changeAddress">更换收货地址</el-button>
                 <el-button @click="handleAddAddress">新建地址</el-button>
               </div>
             </el-col>
@@ -110,6 +113,7 @@
       </div>
     </div>
     <AddressModal ref="modalForm" :record="currentRecord" />
+    <AddressListModal ref="modalFormList" />
   </div>
 </template>
 
@@ -119,6 +123,7 @@ import { getAddress, removeAddress } from "@/api/user";
 import storage from "good-storage";
 import { UID_KEY, isDef } from "@/utils";
 import AddressModal from "@/page/goods/addressModal";
+import AddressListModal from "@/page/goods/addresListModal";
 import bus from "@/bus";
 export default {
   data() {
@@ -146,26 +151,29 @@ export default {
         }
       ],
       allGoodsPrice: null,
-      addressArr: null,
+      address: null,
       uId: storage.get(UID_KEY),
+      addressArr: null
     };
   },
   async created() {
     // console.info(JSON.parse(this.$route.query.obj));
     // this.addressArr = await getAddress()
     getAddress(this.uId).then(res => {
-        this.addressArr = res
-    })
-    const {
-      allPrice,
-      goodsNum,
-      id,
-      imgUrl,
-      name,
-      singlePrice,
-      type
-    } = JSON.parse(this.$route.query.obj);
-    if (JSON.parse(this.$route.query.obj)) {
+      this.address = res[0];
+      this.addressArr = res;
+    });
+    // debugger
+    if (this.$route.query.obj) {
+      const {
+        allPrice,
+        goodsNum,
+        id,
+        imgUrl,
+        name,
+        singlePrice,
+        type
+      } = JSON.parse(this.$route.query.obj);
       this.tableData.splice(0);
       this.tableData.push({
         goodsInfo: { img: imgUrl, type: type, name: name },
@@ -176,7 +184,27 @@ export default {
       this.tableData.forEach(item => {
         this.allGoodsPrice += item.allPrice;
       });
+    } else {
+      this.tableData.splice(0);
+      // console.info(JSON.parse(this.$route.query.arr));
+      // this.tableData = JSON.parse(this.$route.query.arr);
+      JSON.parse(this.$route.query.arr).forEach(item => {
+        this.tableData.push(item)
+        this.allGoodsPrice += item.allPrice;
+      })
     }
+  },
+  mounted() {
+    bus.$on("updateSuccess", async () => {
+      getAddress(this.uId).then(res => {
+        this.address = res[0];
+        this.addressArr = res;
+      });
+    });
+    bus.$on("chose", res => {
+      console.info(res);
+      this.address = res;
+    });
   },
   methods: {
     handleAddAddress() {
@@ -185,14 +213,19 @@ export default {
       this.$refs.modalForm.add();
     },
     handleEdit(row) {
-    //   console.log(index, row);
+      //   console.log(index, row);
       this.$refs.modalForm.currentRecord = row;
       this.$refs.modalForm.edit(row);
       this.$refs.modalForm.title = "编辑";
       this.$refs.modalForm.dialogFormVisible = true;
+    },
+    changeAddress() {
+      this.$refs.modalFormList.title = "切换地址";
+      this.$refs.modalFormList.dialogFormVisible = true;
+      this.$refs.modalFormList.tableData = this.addressArr;
     }
   },
-  components: { Head, AddressModal }
+  components: { Head, AddressModal, AddressListModal }
 };
 </script>
 
