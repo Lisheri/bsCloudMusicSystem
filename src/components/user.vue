@@ -8,7 +8,7 @@
     <!-- 登录后 -->
     <div @click="onLogout" class="logined-user" v-else>
       <img v-lazy="$utils.genImgUrl(user.pic, 80)" class="avatar" />
-      <p class="user-name">{{ user.nickname }}</p>
+      <p class="user-name">{{ user.username }}</p>
     </div>
 
     <!-- 登录框 -->
@@ -16,40 +16,47 @@
       :modal="true"
       :visible.sync="visible"
       :width="$utils.toRem(320)"
-      @close="visible=false"
+      @close="onCloseModal"
     >
       <p slot="title">登录</p>
-      <!-- <div class="login-body"> -->
-      <!-- <el-input
-          class="input"
-          placeholder="请输入您的网易云uid"
-          v-model="uid"
-        />
-        <div class="login-help">
-          <p class="help">
-            1、请
-            <a href="http://music.163.com" target="_blank"
-              >点我(http://music.163.com)</a
-            >打开网易云音乐官网
-          </p>
-          <p class="help">2、点击页面右上角的“登录”</p>
-          <p class="help">3、点击您的头像，进入我的主页</p>
-          <p class="help">
-            4、复制浏览器地址栏 /user/home?id= 后面的数字（网易云 UID）
-          </p>
-      </div>-->
-      <el-form :label-position="top" label-width="80px" :model="formLabelAlign">
-        <el-form-item label="账号">
+      <!-- <el-form
+        label-width="80px"
+        :model="formLabelAlign"
+        ref="formLabelAlign"
+      >
+        <el-form-item
+          label="账号"
+          :rules="[{ required: true, message: '请输入账号', trigger: 'blur' }]"
+        >
           <el-input v-model="formLabelAlign.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="formLabelAlign.password"></el-input>
+        <el-form-item label="密码" :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }]">
+          <el-input type="password" v-model="formLabelAlign.password"></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer" slot="footer">
         <el-button :loading="loading" @click="onLogin" class="login-btn" type="primary">登 录</el-button>
         <el-button :loading="loading" @click="goRegister" class="register-btn" type="primary">注 册</el-button>
-      </span>
+      </span>-->
+      <el-form
+        :model="formLabelAlign"
+        status-icon
+        :rules="rules"
+        ref="formLabelAlign"
+        label-width="80px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="账号" prop="username">
+          <el-input type="text" v-model="formLabelAlign.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="formLabelAlign.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button :loading="loading" @click="onLogin" class="login-btn" type="primary">登 录</el-button>
+          <el-button :loading="loading" @click="goRegister" class="register-btn" type="primary">注 册</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -64,17 +71,18 @@ import {
   mapGetters as mapUserGetters
 } from "@/store/helper/user";
 import bus from "@/bus";
+import {postCheckLogin} from '@/api/user';
 
 export default {
   // 自动登录
   created() {
-    // const uid = storage.get(UID_KEY);
-    // if (isDef(uid)) {
-    //   this.onLogin(uid);
-    // }
+    const username = storage.get("_username_");
+    if (isDef(username)) {
+      this.onLogin2(username);
+    }
   },
   mounted() {
-    bus.$once("registerSuccess", (res) => {
+    bus.$once("registerSuccess", res => {
       this.$notify({
         title: "成功",
         message: "注册成功",
@@ -85,6 +93,20 @@ export default {
     });
   },
   data() {
+    let validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入账号"));
+      } else {
+        callback();
+      }
+    };
+    let validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else {
+        callback();
+      }
+    };
     return {
       visible: false,
       loading: false,
@@ -93,22 +115,63 @@ export default {
       formLabelAlign: {
         username: "",
         password: ""
+      },
+      rules: {
+        username: [{ validator: validatePass, trigger: "blur" }],
+        password: [{ validator: validatePass2, trigger: "blur" }]
       }
+      // top: "top"
     };
   },
   methods: {
     async onLogin() {
-      this.loading = true;
-      const success = await this.login(formLabelAlign.username).finally(() => {
+      this.$refs.formLabelAlign.validate(async valid => {
+        postCheckLogin(this.formLabelAlign).then(async res => {
+          // debugger
+          if (res.data === "success") {
+            if (valid) {
+          this.loading = true;
+          const success = await this.login(
+            this.formLabelAlign.username
+          ).finally(() => {
+            this.loading = false;
+          });
+          if (success) {
+            this.onCloseModal();
+            this.$router.push("/discovery");
+          }
+        } else {
+          console.log("错误提交!!");
+          return false;
+        }
+          } else {
+            this.$notify({
+              title: "失败",
+              message: "账号密码错误，请重新登录",
+              type: "error",
+              duration: 3000,
+              position: "top-right"
+            });
+          }
+        }) 
+        
+      });
+    },
+    async onLogin2(username) {
+      const success = await this.login(username).finally(() => {
         this.loading = false;
       });
       if (success) {
-        this.visible = false;
+        this.onCloseModal();
       }
+    },
+    onCloseModal() {
+      this.visible = false;
     },
     onLogout() {
       confirm("确定要注销吗？", () => {
         this.logout();
+        this.$router.push("/discovery");
       });
     },
     goRegister() {

@@ -17,6 +17,10 @@ import {
   FormItem,
   Notification,
   Message,
+  Select,
+  Option,
+  Row,
+  Col
 } from "element-ui"
 
 import Notifications from "vue-notification"
@@ -62,6 +66,10 @@ export default {
     Vue.use(Form)
     Vue.use(FormItem)
     Vue.use(Notification)
+    Vue.use(Select)
+    Vue.use(Option)
+    Vue.use(Col)
+    Vue.use(Row)
     // Vue.use(Notifications)
     Vue.prototype.$message = Message
     Vue.prototype.$notify = Notification

@@ -48,7 +48,7 @@
                         </div>
                         <div class="buttonGroup">
                             <el-row>
-                                <el-button>立即购买</el-button>
+                                <el-button @click="buyNow">立即购买</el-button>
                                 <el-button class="inCart" @click="pushInCart">加入购物车</el-button>
                             </el-row>
                         </div>
@@ -149,6 +149,14 @@
                     console.info(res);
                 })
                 // this.setGoodData(this.goodData);
+            },
+            buyNow() {
+                // console.info(JSON.parse(this.$route.query.obj))
+                let {
+                    singlePrice
+                } = JSON.parse(this.$route.query.obj)
+                let params = Object.assign(JSON.parse(this.$route.query.obj), {goodsNum: this.goodsNum, type: this.colors[this.colorType].type, allPrice: singlePrice * this.goodsNum})
+                this.$router.push({path: '/goods/order', query: {obj: JSON.stringify(params)}})
             },
             ...mapMutations(['setGoodData']),
             ...mapGetters(['getGoodData'])

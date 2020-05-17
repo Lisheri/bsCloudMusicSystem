@@ -4,7 +4,7 @@ import { notify, isDef } from '@/utils'
 import { getUserDetail, getUserPlaylist, getUserAll } from "@/api"
 
 export default {
-  async login({ commit }, usernme) {
+  async login({ commit }, username) {
     const error = () => {
       notify.error('登录失败，请输入正确的uid。')
       return false
@@ -16,9 +16,9 @@ export default {
 
     try {
       const user = await getUserAll(username)
-      const { profile } = user
-      commit('setUser', profile)
-      storage.set(UID_KEY, profile.userId)
+      commit('setUser', user)
+      storage.set(UID_KEY, user.userId)
+      storage.set("_username_", user.username)
     } catch (e) {
       return error()
     }
@@ -31,5 +31,6 @@ export default {
     commit('setUser', {})
     commit('setUserPlaylist', [])
     storage.set(UID_KEY, null)
+    storage.set("_username_", null)
   }
 }

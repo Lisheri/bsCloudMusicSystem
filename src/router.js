@@ -19,6 +19,9 @@ const HotGoods = () => import('./components/hotGoods.vue');
 const IpPeriphery = () => import('./components/ipPeriphery.vue');
 const ShopCart = () => import('./components/shopCart.vue');
 const Register = () => import('./components/register.vue');
+const MyOrder = () => import('./components/myOrder.vue');
+const MyAddress = () => import('./components/myAddress.vue');
+const OrderCheck = () => import('@/page/goods/orderCheck.vue');
 
 // 内容需要居中的页面
 export const layoutCenterNames = ['discovery', 'playlists', 'songs', 'mvs']
@@ -144,6 +147,21 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register
+    },
+    {
+      path: '/myOrder',
+      name: 'myOrder',
+      component: MyOrder
+    },
+    {
+      path: '/myAddress',
+      name: 'myAddress',
+      component: MyAddress
+    },
+    {
+      path: '/goods/order',
+      name: 'orderCheck',
+      component: OrderCheck
     },
     ...menuRoutes,
   ],

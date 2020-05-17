@@ -11,8 +11,7 @@
 
 ### 后端接口
 
-还在制作中，暂时先使用网易云后端
-https://binaryify.github.io/NeteaseCloudMusicApi
+https://github.com/Lisheri/bsExpressMusicApi
 
 ### 技术栈
 
