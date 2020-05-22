@@ -20,3 +20,9 @@ export const postGoodNum = (params) => postAction('/shopCart/saveNum', params);
 export const postSaveGoodInCart = (params) => postAction('/shopCart/inCart', params);
 
 export const postDeleteGoodAtCart = (params) => postAction('/shopCart/deleteGood', params);
+
+export const postCommitOrder = (params) => postAction('/order/commit', params);
+
+export const getOrderMessage = (params) => postAction('order/message', params);
+
+export const getAllOrder = () => request.get("/order/all");

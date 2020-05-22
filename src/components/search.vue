@@ -97,7 +97,7 @@ const SEARCH_HISTORY_KEY = "__search_history__"
 export default {
   async created() {
     const result = await getSearchHot();
-    this.searchHots = result.hots;
+    this.searchHots = result[0].hots;
   },
   data() {
     return {
@@ -121,6 +121,7 @@ export default {
         return
       }
       getSearchSuggest(value).then(({ result }) => {
+        // console.info(value)
         this.suggest = result
       })
     }, 500),

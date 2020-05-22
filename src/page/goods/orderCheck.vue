@@ -105,7 +105,7 @@
                 <span>￥{{allGoodsPrice+10}}</span>
               </p>
               <div class="commit-order">
-                <el-button type="danger">提交订单</el-button>
+                <el-button type="danger" @click="handleCommitOrder">提交订单</el-button>
               </div>
             </el-col>
           </el-row>
@@ -114,16 +114,19 @@
     </div>
     <AddressModal ref="modalForm" :record="currentRecord" />
     <AddressListModal ref="modalFormList" />
+    <payOrderModal ref="modalFormPay" />
   </div>
 </template>
 
 <script>
 import Head from "@/page/goods/head";
 import { getAddress, removeAddress } from "@/api/user";
+import { postCommitOrder, getAllOrder } from "@/api/goods";
 import storage from "good-storage";
 import { UID_KEY, isDef } from "@/utils";
 import AddressModal from "@/page/goods/addressModal";
 import AddressListModal from "@/page/goods/addresListModal";
+import PayOrderModal from "@/page/goods/payOrder";
 import bus from "@/bus";
 export default {
   data() {
@@ -153,7 +156,8 @@ export default {
       allGoodsPrice: null,
       address: null,
       uId: storage.get(UID_KEY),
-      addressArr: null
+      addressArr: null,
+      outTradeNo: null
     };
   },
   async created() {
@@ -179,7 +183,8 @@ export default {
         goodsInfo: { img: imgUrl, type: type, name: name },
         singlePrice,
         goodsNum,
-        allPrice
+        allPrice,
+        orderArr: []
       });
       this.tableData.forEach(item => {
         this.allGoodsPrice += item.allPrice;
@@ -189,9 +194,9 @@ export default {
       // console.info(JSON.parse(this.$route.query.arr));
       // this.tableData = JSON.parse(this.$route.query.arr);
       JSON.parse(this.$route.query.arr).forEach(item => {
-        this.tableData.push(item)
+        this.tableData.push(item);
         this.allGoodsPrice += item.allPrice;
-      })
+      });
     }
   },
   mounted() {
@@ -223,9 +228,39 @@ export default {
       this.$refs.modalFormList.title = "切换地址";
       this.$refs.modalFormList.dialogFormVisible = true;
       this.$refs.modalFormList.tableData = this.addressArr;
+    },
+    async handleCommitOrder() {
+      // 订单号，标题，描述
+      // req.body.outTradeNo, req.body.subject, req.body.body
+      let params = {};
+      this.tableData.forEach(item => {
+        // params.outTradeNo = Math.random().toFixed(8) * Math.pow(10, 8) + "_" + Math.random().toFixed(5) * Math.pow(10, 5) + "_" + Math.random().toFixed(2) * Math.pow(10, 2)
+        this.outTradeNo = Math.random().toFixed(8) * Math.pow(10, 8);
+        params.outTradeNo = this.outTradeNo;
+        params.subject = item.goodsInfo.name;
+        params.body = item.goodsInfo.type;
+      });
+      const url = await postCommitOrder(params);
+      this.$refs.modalFormPay.dialogFormVisible = true;
+      this.$refs.modalFormPay.title = "下单支付页面";
+      this.$refs.modalFormPay.outTradeNo = this.outTradeNo;
+      window.open(url.data)
     }
   },
-  components: { Head, AddressModal, AddressListModal }
+  components: { Head, AddressModal, AddressListModal, PayOrderModal },
+  watch: {
+    outTradeNo: {
+      async handler(newVal, oldVal) {
+        this.orderArr = await getAllOrder();
+        this.orderArr.forEach(item => {
+          if (item.outTradeNo === newVal) {
+            debugger
+            newVal++;
+          }
+        });
+      }
+    }
+  }
 };
 </script>
 

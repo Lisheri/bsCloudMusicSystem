@@ -7,8 +7,10 @@ import QS from 'qs'
 // const BASE_URL = 'https://api.mtnhao.com/'
 // const BASE_URL = 'http://192.168.31.44:3001/'
 // const BASE_URL = 'http://192.168.0.103:3001/'
-const BASE_URL = 'http://192.168.10.116:3001'
+// const BASE_URL = 'http://192.168.10.116:3001'
 // const BASE_URL = 'http://192.168.1.6:3001'
+// const BASE_URL = 'http://192.168.0.105:3001'
+const BASE_URL = 'http://192.168.31.44:3001'
 // 不带全局loading的请求实例
 export const requestWithoutLoading = createBaseInstance()
 // 带全局loading的请求实例

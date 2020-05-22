@@ -22,7 +22,7 @@
     </div>
     <div class="right">
       <div class="search-wrap">
-        <Search />
+        <!-- <Search /> -->
       </div>
       <Theme />
     </div>
